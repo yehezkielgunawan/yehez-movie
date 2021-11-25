@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
+import { useAppToast } from "components/ui/AppToast";
 import { getMovieDetailsRes, getMoviesRes } from "functions/services/fetcher";
 
 import { MovieContextType, MovieListType, SingleMovieDetail } from "./types";
@@ -7,7 +8,7 @@ import { MovieContextType, MovieListType, SingleMovieDetail } from "./types";
 const INITIAL_MOVIE_LIST: MovieListType = {
   Search: [],
   totalResults: 0,
-  Response: "True",
+  Response: "False",
 };
 
 const INITIAL_DETAIL_MOVIE: SingleMovieDetail = {
@@ -58,14 +59,27 @@ type MovieProviderProps = {
 };
 
 export const MovieProvider = ({ children }: MovieProviderProps) => {
+  const toast = useAppToast();
   const [movieList, setMovieList] = useState<MovieListType>(INITIAL_MOVIE_LIST);
   const [movieDetail, setMovieDetail] =
     useState<SingleMovieDetail>(INITIAL_DETAIL_MOVIE);
 
   const loadMovies = async (keyword: string, page?: number) => {
-    return await getMoviesRes(keyword, page).then((res: MovieListType) =>
-      setMovieList(res)
-    );
+    return await getMoviesRes(keyword, page).then((res: MovieListType) => {
+      if (res.Response === "False") {
+        toast({
+          status: "error",
+          title: res.Error,
+          description: "Please try again later or with another keyword",
+        });
+        return;
+      }
+      toast({
+        status: "success",
+        title: "Here's your movie list based on your keyword.",
+      });
+      return setMovieList(res);
+    });
   };
 
   const loadMovieDetails = async (id: string) => {

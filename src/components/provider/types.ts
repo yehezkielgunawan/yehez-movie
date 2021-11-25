@@ -40,9 +40,10 @@ export type SingleMovie = {
 };
 
 export type MovieListType = {
-  Search: Array<SingleMovie>;
-  totalResults: number;
+  Search?: Array<SingleMovie>;
+  totalResults?: number;
   Response: string;
+  Error?: string;
 };
 
 export type ErrMessage = {
