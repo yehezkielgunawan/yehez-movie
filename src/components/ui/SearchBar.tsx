@@ -1,20 +1,22 @@
-import { Button } from "@chakra-ui/button";
-import { Input } from "@chakra-ui/input";
+import { Button, IconButton } from "@chakra-ui/button";
+import { CloseIcon } from "@chakra-ui/icons";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Stack, Text } from "@chakra-ui/layout";
-import React, { KeyboardEventHandler, useState } from "react";
+import React, { KeyboardEventHandler } from "react";
 
 import { useMovieContext } from "components/provider";
 
 const SearchBar = () => {
-  const [searchKey, setSearchKey] = useState<string>("");
-  const { loadMovies } = useMovieContext();
+  const { loadMovies, searchKeyword, handleChangeSearchKey, handleReset } =
+    useMovieContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    return setSearchKey(e.target.value);
+    return handleChangeSearchKey(e);
   };
 
   const handleSubmit = async () => {
-    return await getMovieList(searchKey);
+    resetResult(false);
+    return await getMovieList(searchKeyword);
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -24,7 +26,11 @@ const SearchBar = () => {
   };
 
   const getMovieList = async (keyword: string) => {
-    await loadMovies(keyword);
+    return await loadMovies(keyword);
+  };
+
+  const resetResult = (isResetButton: boolean) => {
+    handleReset(isResetButton);
   };
 
   return (
@@ -32,11 +38,24 @@ const SearchBar = () => {
       <Text>
         Want to know your favourite movie more? Here is the right place.
       </Text>
-      <Input
-        placeholder="Input the movie title or keyword"
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-      />
+      <InputGroup size="md">
+        <Input
+          placeholder="Input the movie title or keyword"
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          value={searchKeyword}
+        />
+        {searchKeyword.length > 0 && (
+          <InputRightElement>
+            <IconButton
+              aria-label="reset"
+              icon={<CloseIcon />}
+              variant="outline"
+              onClick={() => resetResult(true)}
+            />
+          </InputRightElement>
+        )}
+      </InputGroup>
       <Button
         colorScheme="teal"
         variant="outline"

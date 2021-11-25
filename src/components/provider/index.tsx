@@ -6,9 +6,7 @@ import { getMovieDetailsRes, getMoviesRes } from "functions/services/fetcher";
 import { MovieContextType, MovieListType, SingleMovieDetail } from "./types";
 
 const INITIAL_MOVIE_LIST: MovieListType = {
-  Search: [],
-  totalResults: 0,
-  Response: "False",
+  Response: "",
 };
 
 const INITIAL_DETAIL_MOVIE: SingleMovieDetail = {
@@ -40,12 +38,19 @@ const INITIAL_DETAIL_MOVIE: SingleMovieDetail = {
 };
 
 export const MovieContext = createContext<MovieContextType>({
+  searchKeyword: "",
   movieList: INITIAL_MOVIE_LIST,
   movieDetail: INITIAL_DETAIL_MOVIE,
   loadMovies: async () => {
     return;
   },
   loadMovieDetails: async () => {
+    return;
+  },
+  handleChangeSearchKey: () => {
+    return;
+  },
+  handleReset: () => {
     return;
   },
 });
@@ -63,6 +68,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
   const [movieList, setMovieList] = useState<MovieListType>(INITIAL_MOVIE_LIST);
   const [movieDetail, setMovieDetail] =
     useState<SingleMovieDetail>(INITIAL_DETAIL_MOVIE);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
 
   const loadMovies = async (keyword: string, page?: number) => {
     return await getMoviesRes(keyword, page).then((res: MovieListType) => {
@@ -74,10 +80,6 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
         });
         return;
       }
-      toast({
-        status: "success",
-        title: "Here's your movie list based on your keyword.",
-      });
       return setMovieList(res);
     });
   };
@@ -88,13 +90,25 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
     );
   };
 
+  const handleChangeSearchKey = (e: React.ChangeEvent<HTMLInputElement>) => {
+    return setSearchKeyword(e.target.value);
+  };
+
+  const handleReset = (isResetButton: boolean) => {
+    setMovieList(INITIAL_MOVIE_LIST);
+    isResetButton && setSearchKeyword("");
+  };
+
   return (
     <MovieContext.Provider
       value={{
+        searchKeyword,
         movieList,
         movieDetail,
         loadMovies,
         loadMovieDetails,
+        handleChangeSearchKey,
+        handleReset,
       }}
     >
       {children}

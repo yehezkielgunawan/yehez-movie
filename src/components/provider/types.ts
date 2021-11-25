@@ -1,3 +1,5 @@
+import React from "react";
+
 export type SingleRating = {
   Source: string;
   Value: string;
@@ -52,8 +54,11 @@ export type ErrMessage = {
 };
 
 export type MovieContextType = {
+  searchKeyword: string;
   movieList: MovieListType;
   movieDetail: SingleMovieDetail;
   loadMovies: (keyword: string, page?: number) => Promise<void>;
   loadMovieDetails: (id: string) => Promise<void>;
+  handleChangeSearchKey: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleReset: (isResetButton: boolean) => void;
 };
