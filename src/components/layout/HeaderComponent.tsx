@@ -31,7 +31,7 @@ const HeaderComponent = () => {
         px={isDesktopWidth ? 1 : 3}
       >
         <Text as="a" href="/" fontSize="lg">
-          <b>yehez-nextjs-chakra-starter</b>
+          <b>Yehez-Movie</b>
         </Text>
 
         <Flex gridGap={3} align="center">

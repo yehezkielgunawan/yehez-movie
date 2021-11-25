@@ -3,6 +3,7 @@ import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
+import { MovieProvider } from "components/provider";
 import ComponentWrapper from "components/wrapper/ContainerWrapper";
 
 import defaultSEOConfig from "../../next-seo.config";
@@ -17,10 +18,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
         />
       </Head>
-      <DefaultSeo {...defaultSEOConfig} />
-      <ComponentWrapper>
-        <Component {...pageProps} />
-      </ComponentWrapper>
+      <MovieProvider>
+        <DefaultSeo {...defaultSEOConfig} />
+        <ComponentWrapper>
+          <Component {...pageProps} />
+        </ComponentWrapper>
+      </MovieProvider>
     </ChakraProvider>
   );
 }
