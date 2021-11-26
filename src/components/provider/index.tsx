@@ -1,58 +1,30 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
 import { useAppToast } from "components/ui/AppToast";
-import { getMovieDetailsRes, getMoviesRes } from "functions/services/fetcher";
+import { getMoviesRes } from "functions/services/fetcher";
 
 import { MovieContextType, MovieListType, SingleMovieDetail } from "./types";
 
-const INITIAL_MOVIE_LIST: MovieListType = {
+export const INITIAL_MOVIE_LIST: MovieListType = {
   Response: "",
 };
 
-const INITIAL_DETAIL_MOVIE: SingleMovieDetail = {
-  Title: "",
-  Year: "",
-  Rated: "",
-  Released: "",
-  Runtime: "",
-  Genre: "",
-  Director: "",
-  Writer: "",
-  Actors: "",
-  Plot: "",
-  Language: "",
-  Country: "",
-  Awards: "",
-  Poster: "",
-  Ratings: [],
-  Metascore: "",
-  imdbRating: "",
-  imdbVotes: "",
-  imdbID: "",
-  Type: "",
-  DVD: "",
-  BoxOffice: "",
-  Production: "",
-  Website: "",
+export const INITIAL_DETAIL_MOVIE: SingleMovieDetail = {
   Response: "",
 };
 
 export const MovieContext = createContext<MovieContextType>({
   searchKeyword: "",
   movieList: INITIAL_MOVIE_LIST,
-  movieDetail: INITIAL_DETAIL_MOVIE,
   page: 1,
   isSubmitted: false,
   loadMovies: async () => {
     return;
   },
-  loadMovieDetails: async () => {
-    return;
-  },
   handleChangeSearchKey: () => {
     return;
   },
-  handleReset: () => {
+  handleResetList: () => {
     return;
   },
   setNextPage: () => {
@@ -74,8 +46,6 @@ type MovieProviderProps = {
 export const MovieProvider = ({ children }: MovieProviderProps) => {
   const toast = useAppToast();
   const [movieList, setMovieList] = useState<MovieListType>(INITIAL_MOVIE_LIST);
-  const [movieDetail, setMovieDetail] =
-    useState<SingleMovieDetail>(INITIAL_DETAIL_MOVIE);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -94,17 +64,11 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
     });
   };
 
-  const loadMovieDetails = async (id: string) => {
-    return await getMovieDetailsRes(id).then((res: SingleMovieDetail) =>
-      setMovieDetail(res)
-    );
-  };
-
   const handleChangeSearchKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     return setSearchKeyword(e.target.value);
   };
 
-  const handleReset = (isResetButton: boolean) => {
+  const handleResetList = (isResetButton: boolean) => {
     setMovieList(INITIAL_MOVIE_LIST);
     setPage(1);
     setIsSubmitted(false);
@@ -124,13 +88,11 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
       value={{
         searchKeyword,
         movieList,
-        movieDetail,
         page,
         isSubmitted,
         loadMovies,
-        loadMovieDetails,
         handleChangeSearchKey,
-        handleReset,
+        handleResetList,
         setNextPage,
         setPrevPage,
       }}

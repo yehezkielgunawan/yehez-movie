@@ -5,6 +5,7 @@ import React from "react";
 
 import { useMovieContext } from "components/provider";
 import AppLoader from "components/ui/AppLoader";
+import { LinkComponent } from "components/ui/LinkComponent";
 import MovieBox from "components/ui/MovieBox";
 import SearchBar from "components/ui/SearchBar";
 import Main from "components/wrapper/Main";
@@ -42,7 +43,9 @@ const Index = () => {
         <Stack spacing={3}>
           <SimpleGrid columns={[1, 2]} spacing={3}>
             {movieList.Search?.map((movie, index) => (
-              <MovieBox movie={movie} key={index} />
+              <LinkComponent key={index} href={`/${movie.imdbID}`}>
+                <MovieBox movie={movie} />
+              </LinkComponent>
             ))}
           </SimpleGrid>
           <Flex gridGap={4} align="center" justify="center">

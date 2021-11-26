@@ -7,7 +7,7 @@ import React, { KeyboardEventHandler } from "react";
 import { useMovieContext } from "components/provider";
 
 const SearchBar = () => {
-  const { loadMovies, searchKeyword, handleChangeSearchKey, handleReset } =
+  const { loadMovies, searchKeyword, handleChangeSearchKey, handleResetList } =
     useMovieContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +30,7 @@ const SearchBar = () => {
   };
 
   const resetResult = (isResetButton: boolean) => {
-    handleReset(isResetButton);
+    handleResetList(isResetButton);
   };
 
   return (
