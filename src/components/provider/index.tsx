@@ -78,7 +78,6 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
           title: res.Error,
           description: "Please try again later or with another keyword",
         });
-        return;
       }
       return setMovieList(res);
     });

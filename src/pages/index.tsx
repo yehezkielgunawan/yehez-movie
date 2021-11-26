@@ -34,7 +34,7 @@ const Index = () => {
   return (
     <Main>
       <SearchBar />
-      {movieList.Response === "True" && searchKeyword.length > 0 && (
+      {movieList.Response === "True" && movieList.Search && (
         <>
           <SimpleGrid columns={[1, 2]} spacing={3}>
             {movieList.Search?.map((movie, index) => (
@@ -69,7 +69,7 @@ const Index = () => {
         </>
       )}
 
-      {movieList.Response === "False" && searchKeyword.length > 0 && (
+      {movieList.Response === "False" && movieList.Error && (
         <Text textAlign="center">Oops not found!</Text>
       )}
     </Main>
