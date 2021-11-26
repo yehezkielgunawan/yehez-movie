@@ -1,5 +1,4 @@
-import { Button, IconButton } from "@chakra-ui/button";
-import { CloseIcon } from "@chakra-ui/icons";
+import { Button } from "@chakra-ui/button";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Stack, Text } from "@chakra-ui/layout";
 import React, { KeyboardEventHandler } from "react";
@@ -45,16 +44,12 @@ const SearchBar = () => {
           onKeyDown={handleKeyDown}
           value={searchKeyword}
         />
-        {searchKeyword.length > 0 && (
-          <InputRightElement>
-            <IconButton
-              aria-label="reset"
-              icon={<CloseIcon />}
-              variant="outline"
-              onClick={() => resetResult(true)}
-            />
-          </InputRightElement>
-        )}
+
+        <InputRightElement w="4rem">
+          <Button variant="outline" onClick={() => resetResult(true)}>
+            Reset
+          </Button>
+        </InputRightElement>
       </InputGroup>
       <Button
         colorScheme="teal"
