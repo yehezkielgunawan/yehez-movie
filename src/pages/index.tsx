@@ -9,21 +9,28 @@ import SearchBar from "components/ui/SearchBar";
 import Main from "components/wrapper/Main";
 
 const Index = () => {
-  const { movieList, searchKeyword, loadMovies } = useMovieContext();
-  const [page, setPage] = useState<number>(1);
+  const {
+    movieList,
+    searchKeyword,
+    loadMovies,
+    page,
+    setNextPage,
+    setPrevPage,
+  } = useMovieContext();
+
   const [itemPerPage, setItemPerPage] = useState<number>(
     movieList.Search?.length ?? 0
   );
 
   const nextPage = async () => {
     await getMovieListPagination(page + 1);
-    setPage(page + 1);
+    setNextPage();
     setItemPerPage(itemPerPage + (movieList.Search ?? []).length);
   };
 
   const prevPage = async () => {
     await getMovieListPagination(page - 1);
-    setPage(page - 1);
+    setPrevPage();
     setItemPerPage(itemPerPage - (movieList.Search ?? []).length);
   };
 

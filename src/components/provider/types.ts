@@ -57,8 +57,11 @@ export type MovieContextType = {
   searchKeyword: string;
   movieList: MovieListType;
   movieDetail: SingleMovieDetail;
+  page: number;
   loadMovies: (keyword: string, page?: number) => Promise<void>;
   loadMovieDetails: (id: string) => Promise<void>;
   handleChangeSearchKey: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleReset: (isResetButton: boolean) => void;
+  setNextPage: () => void;
+  setPrevPage: () => void;
 };

@@ -41,6 +41,7 @@ export const MovieContext = createContext<MovieContextType>({
   searchKeyword: "",
   movieList: INITIAL_MOVIE_LIST,
   movieDetail: INITIAL_DETAIL_MOVIE,
+  page: 1,
   loadMovies: async () => {
     return;
   },
@@ -51,6 +52,12 @@ export const MovieContext = createContext<MovieContextType>({
     return;
   },
   handleReset: () => {
+    return;
+  },
+  setNextPage: () => {
+    return;
+  },
+  setPrevPage: () => {
     return;
   },
 });
@@ -69,6 +76,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
   const [movieDetail, setMovieDetail] =
     useState<SingleMovieDetail>(INITIAL_DETAIL_MOVIE);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
 
   const loadMovies = async (keyword: string, page?: number) => {
     return await getMoviesRes(keyword, page).then((res: MovieListType) => {
@@ -95,7 +103,16 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
 
   const handleReset = (isResetButton: boolean) => {
     setMovieList(INITIAL_MOVIE_LIST);
+    setPage(1);
     isResetButton && setSearchKeyword("");
+  };
+
+  const setNextPage = () => {
+    return setPage(page + 1);
+  };
+
+  const setPrevPage = () => {
+    return setPage(page - 1);
   };
 
   return (
@@ -104,10 +121,13 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
         searchKeyword,
         movieList,
         movieDetail,
+        page,
         loadMovies,
         loadMovieDetails,
         handleChangeSearchKey,
         handleReset,
+        setNextPage,
+        setPrevPage,
       }}
     >
       {children}
