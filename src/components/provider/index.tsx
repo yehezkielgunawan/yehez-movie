@@ -42,6 +42,7 @@ export const MovieContext = createContext<MovieContextType>({
   movieList: INITIAL_MOVIE_LIST,
   movieDetail: INITIAL_DETAIL_MOVIE,
   page: 1,
+  isSubmitted: false,
   loadMovies: async () => {
     return;
   },
@@ -77,6 +78,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
     useState<SingleMovieDetail>(INITIAL_DETAIL_MOVIE);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [page, setPage] = useState<number>(1);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const loadMovies = async (keyword: string, page?: number) => {
     return await getMoviesRes(keyword, page).then((res: MovieListType) => {
@@ -87,7 +89,8 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
           description: "Please try again later or with another keyword",
         });
       }
-      return setMovieList(res);
+      setMovieList(res);
+      setIsSubmitted(true);
     });
   };
 
@@ -104,6 +107,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
   const handleReset = (isResetButton: boolean) => {
     setMovieList(INITIAL_MOVIE_LIST);
     setPage(1);
+    setIsSubmitted(false);
     isResetButton && setSearchKeyword("");
   };
 
@@ -122,6 +126,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
         movieList,
         movieDetail,
         page,
+        isSubmitted,
         loadMovies,
         loadMovieDetails,
         handleChangeSearchKey,

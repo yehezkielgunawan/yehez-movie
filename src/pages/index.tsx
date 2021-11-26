@@ -1,9 +1,10 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { Flex, SimpleGrid } from "@chakra-ui/layout";
+import { Flex, SimpleGrid, Stack } from "@chakra-ui/layout";
 import { Button, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 import { useMovieContext } from "components/provider";
+import AppLoader from "components/ui/AppLoader";
 import MovieBox from "components/ui/MovieBox";
 import SearchBar from "components/ui/SearchBar";
 import Main from "components/wrapper/Main";
@@ -14,24 +15,19 @@ const Index = () => {
     searchKeyword,
     loadMovies,
     page,
+    isSubmitted,
     setNextPage,
     setPrevPage,
   } = useMovieContext();
 
-  const [itemPerPage, setItemPerPage] = useState<number>(
-    movieList.Search?.length ?? 0
-  );
-
   const nextPage = async () => {
     await getMovieListPagination(page + 1);
     setNextPage();
-    setItemPerPage(itemPerPage + (movieList.Search ?? []).length);
   };
 
   const prevPage = async () => {
     await getMovieListPagination(page - 1);
     setPrevPage();
-    setItemPerPage(itemPerPage - (movieList.Search ?? []).length);
   };
 
   const getMovieListPagination = async (pageNum: number) => {
@@ -41,8 +37,9 @@ const Index = () => {
   return (
     <Main>
       <SearchBar />
+      {movieList.Response === "" && isSubmitted && <AppLoader />}
       {movieList.Response === "True" && movieList.Search && (
-        <>
+        <Stack spacing={3}>
           <SimpleGrid columns={[1, 2]} spacing={3}>
             {movieList.Search?.map((movie, index) => (
               <MovieBox movie={movie} key={index} />
@@ -73,7 +70,7 @@ const Index = () => {
               Next Page
             </Button>
           </Flex>
-        </>
+        </Stack>
       )}
 
       {movieList.Response === "False" && movieList.Error && (

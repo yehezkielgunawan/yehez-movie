@@ -58,6 +58,7 @@ export type MovieContextType = {
   movieList: MovieListType;
   movieDetail: SingleMovieDetail;
   page: number;
+  isSubmitted: boolean;
   loadMovies: (keyword: string, page?: number) => Promise<void>;
   loadMovieDetails: (id: string) => Promise<void>;
   handleChangeSearchKey: (e: React.ChangeEvent<HTMLInputElement>) => void;
