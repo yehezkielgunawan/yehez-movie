@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import createPersistedState from "use-persisted-state";
 
 import { useAppToast } from "components/ui/AppToast";
 import { getMoviesRes } from "functions/services/fetcher";
@@ -18,6 +19,7 @@ export const MovieContext = createContext<MovieContextType>({
   movieList: INITIAL_MOVIE_LIST,
   page: 1,
   isSubmitted: false,
+  favourite: [],
   loadMovies: async () => {
     return;
   },
@@ -33,6 +35,12 @@ export const MovieContext = createContext<MovieContextType>({
   setPrevPage: () => {
     return;
   },
+  handleFavourite: () => {
+    return;
+  },
+  checkFavourite: () => {
+    return false;
+  },
 });
 
 export const useMovieContext = () => {
@@ -45,10 +53,12 @@ type MovieProviderProps = {
 
 export const MovieProvider = ({ children }: MovieProviderProps) => {
   const toast = useAppToast();
+  const useFavourite = createPersistedState("favourite");
   const [movieList, setMovieList] = useState<MovieListType>(INITIAL_MOVIE_LIST);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [favourite, setFavourite] = useFavourite<Array<SingleMovieDetail>>([]);
 
   const loadMovies = async (keyword: string, page?: number) => {
     return await getMoviesRes(keyword, page).then((res: MovieListType) => {
@@ -83,6 +93,32 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
     return setPage(page - 1);
   };
 
+  const handleFavourite = (category: string, content: SingleMovieDetail) => {
+    const tempArray = favourite;
+    if (category === "set") {
+      tempArray.push(content);
+      toast({
+        status: "success",
+        title: "Successfully added to favourite list.",
+      });
+    } else if (category === "delete") {
+      for (let i = 0; i < tempArray.length; i++) {
+        if (tempArray[i].imdbID === content.imdbID) {
+          tempArray.splice(i, 1);
+          toast({
+            status: "warning",
+            title: "Removed from favourite list.",
+          });
+        }
+      }
+    }
+    setFavourite(tempArray);
+  };
+
+  const checkFavourite = (id: string) => {
+    return favourite.some((item) => item.imdbID === id);
+  };
+
   return (
     <MovieContext.Provider
       value={{
@@ -90,11 +126,14 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
         movieList,
         page,
         isSubmitted,
+        favourite,
         loadMovies,
         handleChangeSearchKey,
         handleResetList,
         setNextPage,
         setPrevPage,
+        handleFavourite,
+        checkFavourite,
       }}
     >
       {children}

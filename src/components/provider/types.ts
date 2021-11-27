@@ -59,9 +59,12 @@ export type MovieContextType = {
   movieList: MovieListType;
   page: number;
   isSubmitted: boolean;
+  favourite: Array<SingleMovieDetail>;
   loadMovies: (keyword: string, page?: number) => Promise<void>;
   handleChangeSearchKey: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleResetList: (isResetButton: boolean) => void;
   setNextPage: () => void;
   setPrevPage: () => void;
+  handleFavourite: (category: string, content: SingleMovieDetail) => void;
+  checkFavourite: (id: string) => boolean;
 };

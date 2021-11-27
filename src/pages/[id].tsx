@@ -1,4 +1,4 @@
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Button,
   Skeleton,
@@ -11,29 +11,39 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
+import { MdFavorite } from "react-icons/md";
 
-import { INITIAL_DETAIL_MOVIE } from "components/provider";
+import { INITIAL_DETAIL_MOVIE, useMovieContext } from "components/provider";
 import { SingleMovieDetail } from "components/provider/types";
 import { LinkComponent } from "components/ui/LinkComponent";
 import Main from "components/wrapper/Main";
 import { getMovieDetailsRes } from "functions/services/fetcher";
 
 const MovieDetails = () => {
+  const { handleFavourite, checkFavourite } = useMovieContext();
   const router = useRouter();
   const { id } = router.query;
   const [tempDetail, setTempDetail] =
     useState<SingleMovieDetail>(INITIAL_DETAIL_MOVIE);
 
   const getMovieDetails = async () => {
-    await getMovieDetailsRes(String(id)).then((res: SingleMovieDetail) =>
+    return await getMovieDetailsRes(String(id)).then((res: SingleMovieDetail) =>
       setTempDetail(res)
     );
   };
 
+  const setFavourite = () => {
+    handleFavourite("set", tempDetail);
+  };
+
+  const deleteFavourite = () => {
+    handleFavourite("delete", tempDetail);
+  };
+
   useEffect(() => {
     getMovieDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    checkFavourite(String(id));
+  });
 
   return (
     <Main>
@@ -74,11 +84,33 @@ const MovieDetails = () => {
           </Text>
         </Stack>
       </Skeleton>
-      <LinkComponent href="/">
-        <Button w="100%" leftIcon={<ChevronLeftIcon />} colorScheme="gray">
-          Go Back
-        </Button>
-      </LinkComponent>
+      <Flex gridGap={2} w="100%">
+        <LinkComponent href="/">
+          <Button leftIcon={<ChevronLeftIcon />} colorScheme="gray">
+            Go Back
+          </Button>
+        </LinkComponent>
+
+        {checkFavourite(String(id)) ? (
+          <Button
+            colorScheme="red"
+            leftIcon={<DeleteIcon />}
+            onClick={() => deleteFavourite()}
+            disabled={!checkFavourite(String(id))}
+          >
+            Remove From Favourite
+          </Button>
+        ) : (
+          <Button
+            colorScheme="yellow"
+            leftIcon={<MdFavorite />}
+            onClick={() => setFavourite()}
+            disabled={checkFavourite(String(id))}
+          >
+            Add to Favourite
+          </Button>
+        )}
+      </Flex>
     </Main>
   );
 };
