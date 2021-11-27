@@ -12,7 +12,11 @@
 
 [How to use it?](https://github.com/yehezkielgunawan/yehez-movie#how-to-use-it)
 
+[How to run it locally?](https://github.com/yehezkielgunawan/yehez-movie#how-to-run-it-locally)
+
 [Reference](https://github.com/yehezkielgunawan/yehez-movie#references)
+
+[Additional Notes](https://github.com/yehezkielgunawan/yehez-movie#additional-notes)
 
 ---
 
@@ -26,6 +30,7 @@ This project is scaffolded using my own starter template [yehez-nextchara-starte
 - [ReactJS](https://reactjs.org/) as the main library code.
 - [Chakra UI](https://chakra-ui.com/docs/getting-started) as UI Library.
 - [Axios](https://axios-http.com/) for HTTP Request.
+- [OMDB API](https://www.omdbapi.com/) for the movie data list.
 
 ## ⚡ What's included here?
 
@@ -49,6 +54,14 @@ This project is scaffolded using my own starter template [yehez-nextchara-starte
 - To remove the movie from your favorite movie list, you can click the X button on the Favourite page or click the `Remove from Favourite` button on the detail movie page.
   ![Remove from Favourite](https://res.cloudinary.com/yehez/image/upload/v1637990722/JULO/Remove_from_Favourite_hyurnf.png)
 
+## How to run it locally?
+
+- Git clone `https://github.com/yehezkielgunawan/yehez-movie`
+- Don't forget to run `npm install` to install the dependencies
+- Make `.env.local` in the root project and fill the API_KEY field with your own API Key. The format can be seen at `.env.example`
+- To run the dev server, you can run `npm run dev` and open `localhost:3000` in your browser.
+- To build production locally, you can run `npm run build`. And if you want to run it, you can run `npm run start` and open `localhost:3000` in your browser.
+
 ## References
 
 - [Next.js docs site](https://nextjs.org/)
@@ -57,3 +70,7 @@ This project is scaffolded using my own starter template [yehez-nextchara-starte
 - [yehez-markdown-previewer](https://markdown.yehezgun.com/) - my own live markdown editor to generate this README.
 - [yehez-nextchara-starter](https://yehez-nextchakra-starter.yehezgun.com/) - my own base starter template for Next.js project.
 - [Freepik Image](https://image.flaticon.com/icons/png/512/1031/1031982.png) - For the image asset.
+
+## Additional Notes
+
+Based on the [OMDB Docs](https://www.omdbapi.com/), the parameter using keyword or movie ID is required. So I made this project like a movie finder, not like a common movie list page.
