@@ -19,7 +19,7 @@ export const MovieContext = createContext<MovieContextType>({
   movieList: INITIAL_MOVIE_LIST,
   page: 1,
   isSubmitted: false,
-  favourite: [],
+  favouriteList: [],
   loadMovies: async () => {
     return;
   },
@@ -58,7 +58,9 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [favourite, setFavourite] = useFavourite<Array<SingleMovieDetail>>([]);
+  const [favouriteList, setFavouriteList] = useFavourite<
+    Array<SingleMovieDetail>
+  >([]);
 
   const loadMovies = async (keyword: string, page?: number) => {
     return await getMoviesRes(keyword, page).then((res: MovieListType) => {
@@ -94,29 +96,26 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
   };
 
   const handleFavourite = (category: string, content: SingleMovieDetail) => {
-    const tempArray = favourite;
     if (category === "set") {
-      tempArray.push(content);
+      setFavouriteList([...favouriteList, content]);
       toast({
         status: "success",
         title: "Successfully added to favourite list.",
       });
     } else if (category === "delete") {
-      for (let i = 0; i < tempArray.length; i++) {
-        if (tempArray[i].imdbID === content.imdbID) {
-          tempArray.splice(i, 1);
-          toast({
-            status: "warning",
-            title: "Removed from favourite list.",
-          });
-        }
-      }
+      const remainingFavourite = favouriteList.filter(
+        (favourite) => favourite.imdbID !== content.imdbID
+      );
+      toast({
+        status: "warning",
+        title: "Removed from favourite list.",
+      });
+      setFavouriteList(remainingFavourite);
     }
-    setFavourite(tempArray);
   };
 
   const checkFavourite = (id: string) => {
-    return favourite.some((item) => item.imdbID === id);
+    return favouriteList.some((item) => item.imdbID === id);
   };
 
   return (
@@ -126,7 +125,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
         movieList,
         page,
         isSubmitted,
-        favourite,
+        favouriteList,
         loadMovies,
         handleChangeSearchKey,
         handleResetList,

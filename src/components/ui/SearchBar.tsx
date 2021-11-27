@@ -1,9 +1,13 @@
 import { Button } from "@chakra-ui/button";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Stack, Text } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/react";
 import React, { KeyboardEventHandler } from "react";
+import { MdFavorite } from "react-icons/md";
 
 import { useMovieContext } from "components/provider";
+
+import { LinkComponent } from "./LinkComponent";
 
 const SearchBar = () => {
   const { loadMovies, searchKeyword, handleChangeSearchKey, handleResetList } =
@@ -34,9 +38,16 @@ const SearchBar = () => {
 
   return (
     <Stack spacing={2}>
-      <Text>
-        Want to know your favourite movie more? Here is the right place.
-      </Text>
+      <Flex justify="space-between" align="center">
+        <Text>
+          Want to know your favourite movie more? Here is the right place.
+        </Text>
+        <LinkComponent href="/favourite">
+          <Button leftIcon={<MdFavorite />} colorScheme="red">
+            Favourite Movie List
+          </Button>
+        </LinkComponent>
+      </Flex>
       <InputGroup size="md">
         <Input
           placeholder="Input the movie title or keyword"

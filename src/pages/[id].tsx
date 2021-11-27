@@ -87,7 +87,7 @@ const MovieDetails = () => {
       <Flex gridGap={2} w="100%">
         <LinkComponent href="/">
           <Button leftIcon={<ChevronLeftIcon />} colorScheme="gray">
-            Go Back
+            Home
           </Button>
         </LinkComponent>
 
